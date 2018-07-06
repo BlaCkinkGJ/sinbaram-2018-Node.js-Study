@@ -14,8 +14,10 @@
 | 4주차 | 파일 업로드 및 데이터베이스의 사용 |
 | 5주차 | HTTP, cookie, session, 다중 사용자 |
 | 6주차 | 보안, 외부 인증, passport.js, Auth |
+[^2]
 
 ### 자료 작성법
 Markdown 기반의 PPT 제작 프로그램 Marp[^1]를 활용한 작성
 
-[^1]: https://yhatt.github.io/marp/
+[^1]: https://yhatt.github.io/marp/\
+[^2]: 5, 6주차는 기존 문서 6, 7주차에 해당합니다.
