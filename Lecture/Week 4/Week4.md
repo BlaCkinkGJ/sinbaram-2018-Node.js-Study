@@ -11,6 +11,8 @@
 사용자가 업로드한 파일을 서버의 디렉토리에 저장하는 방법을 
 알아봅시다.
 
+그런데 아쉽게도 Express에서는 위의 기능을 지원하지 않습니다.
+
 ---
 
 # Multer
@@ -18,20 +20,21 @@
 Multer는 multipart/form-data를 처리하기 위한 Node.js의 미들웨어.
 [Multer github](https://github.com/expressjs/multer) 페이지를 참고해봅시다.
 
-![](images/multer1.jpg)
+![multer](images/multer1.jpg)
 
 ---
 
 # Multer install
 
 ```text
-PS C:\Users\User> npm install multer --save
+PS C:\Users\User\NodeJS> npm install multer --save
 npm WARN package@1.0.0 No description
 npm WARN package@1.0.0 No repository field.
 
 + multer@1.3.1
 added 21 packages in 2.116s
 ```
+
 ---
 
 # Upload form
@@ -60,6 +63,12 @@ form에 **enctype="multipart/form-data**를 추가해야 사용자가
 
 ---
 
+# Upload form
+
+![upload-form](images/upload-form.jpg)
+
+---
+
 # Upload form에 맞는 라우터 작성
 
 ```javascript
@@ -76,7 +85,7 @@ app.post('/upload', (req, res) => {
 
 # Response render 메소드
 
-![](images/res-render.jpg)
+![res.render](images/res-render.jpg)
 
 * <span style="font-size:80%">view를 화면에 뿌리고, 뿌려진 HTML string을 client에 전달</span>
 * <span style="font-size:80%">view는 절대경로이거나 views setting값에 대한 상대경로 이어야 함.</span>
@@ -98,7 +107,7 @@ app.get(name);
 
 # Special names
 
-![](images/special-names.jpg)
+![res settings special names](images/special-names.jpg)
 
 ```javascript
 app.set('views', './views_file');
@@ -116,7 +125,6 @@ const app        = express();
 const bodyParser = require('body-parser');
 const ejs        = require('ejs');
 
-app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.set('views', './views_file');
 app.set('view engine', 'html')
@@ -164,13 +172,21 @@ app.post('/upload', upload.single('userfile'), (req, res) => {
 ```
 ---
 
-# Multer 심화
-사용자 업로드 파일에 대해서 좀더 부가적인 처리를 해주고 싶은데...
+# 결과
+
+<center><img src = images/multer3.jpg width = 30% height = 30%></img></center>
+<center><img src = images/multer5.jpg width = 70% height = 70%></img></center>
+
+---
+
+# multer의 옵션으로 dest 대신 storage
+<center><img src = images/multer4.jpg width = 110% height = 110%></img></center>
 
 ---
 
 ```javascript
-const storage = multer.diskStorage({
+const multer     = require('multer')
+const storage    = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads/');
     },
@@ -178,27 +194,165 @@ const storage = multer.diskStorage({
       cb(null, file.originalname);
     }
   });
-const upload = multer({ storage: storage })
+const upload     = multer({ storage: storage })
+
+...
+
+app.post('/upload', upload.single('userfile'), (req, res) => {
+    console.log(req.file);
+    res.send("Uploaded! : " + req.file.filename);
+})
 ```
 
 ---
 
 # 데이터베이스의 사용
 
-데이터베이스란 데이터를 저장하고 꺼내보고 고도로 다뤄볼수있는 
+Node.js에서 mySQL을 제어하는 방법을 알아봅시다.
 
-인간에 비유하면 뇌 또는 심장을 담당
+---
 
-정보를 다루는 일을 하기위해서 데이터베이스를 연구하는것은 굉장히 중요
+# MySQL Install
 
-데이터베이스는 특정한 제품을 나타내는게 아닌 제품들을 아우르는 제품군을 나타내는 말
+* **Windows/Mac** : https://bitnami.com/stack/wamp
+* **Linux** : sudo apt-get install mysql 치고 tab 두번 눌러서 나오는 목록 중 mysql-server와 mysql-client의 가장 최신버전 설치.
 
-데이터베이스에 해당하는 여러가지 소프트웨어가 존재하고, 그 소프트웨어는 크게 관계형 데이터베이스와 관계형 데이터베이스가 아닌 것으로 나눌 수 있다.
+---
 
-관계형 데이터베이스에 속하는 데이터베이스의 패러다임은 지난 4~50년간 it세계를 지배하던 가장 중요하던 패러다임 중 하나. 그들 중 대표적인 관계형 데이터베이스는 ORACLE, MYSQL, SQL_SERVER
+# Windows/Mac 
 
-데이터베이스를 한다고 하면 관계형 데이터베이스를 다룬다는 말과 동급이었다.
+```text
+PS C:\Bitnami\wampstack-7.1.19-1>
+```
 
-데이터베이스를 처음으로 하는 사람들은 관계형 데이터베이스를 먼저 하고 가는것을 추천
+**manager-windows.exe 실행.**
+![MySQL Manager](images/mysql1.jpg)
 
-NoSQL 은 not only sql의 약자이고, 관계형 데이터베이스가 아닌 다양한 데이터베이스가 출현하게 되는 키워드임.
+---
+
+Command prompt를 키고 아래 디렉토리에 갑니다.
+```text
+C:\Bitnami\wampstack-7.1.19-1\mysql\bin>
+```
+
+그리고 아래 명령을 실행해줍시다. 이는 모든 플랫폼 공통입니다.
+```text
+mysql -uroot -p
+```
+
+---
+
+# MySQL 실행화면
+<center><img src = images/mysql2.jpg width = 90% height = 90%></img></center>
+
+---
+
+# MySQL Table 구성
+<center><img src = images/mysql3.jpg width = 80% height = 80%></img></center>
+<center><span style="font-size:80%">(출처 : 생활코딩)</span></center>
+
+---
+
+## 생성된 'topic' 테이블을 Node.js에서 제어해봅시다.
+**node-mysql** github 참고 (url : https://github.com/mysqljs/mysql)
+
+##### Install
+```text
+npm install --save node-mysql
+```
+
+---
+
+# Create Database
+```javascript
+const mysql      = require('mysql');
+const connection = mysql.createConnection({
+    host : 'localhost',
+    user : 'root',
+    password : 'tlswlgmd12',
+});
+
+connection.connect();
+
+var sql = 'CREATE DATABASE ?? CHARACTER SET utf8 COLLATE \
+		utf8_general_ci'
+var dbName = 'o2';
+connection.query(sql, [dbName], (err, rows, fields) => {
+    if (err) {
+        console.log(err);
+    }
+    else {
+        console.log('Database ' + dbName + ' Created!');
+    }
+});
+
+connection.end();
+```
+
+---
+
+## Create Database table
+```javascript
+	...
+    database : 'o2'	
+});
+
+connection.connect();
+
+var sql = 'CREATE TABLE ?? (\
+		`id` int(11) NOT NULL AUTO_INCREMENT,\
+		`title` varchar(100) NOT NULL,\
+		`description` text NOT NULL,\
+		`author` varchar(30) NOT NULL,\
+		PRIMARY KEY (id)\
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
+var tableName = 'topic';
+connection.query(sql, [tableName], (err, rows, fields) => {
+    if (err) {
+        console.log(err);
+    }
+    else {
+        console.log('Table ' + tableName + ' Created!');
+    }
+});
+
+connection.end();
+```
+
+---
+
+## INSERT, SELECT 실습해보기
+
+```javascript
+var sql = 'INSERT INTO topic (title, description, author) \
+	VALUES(?, ?, ?);';
+var params = ['DirectX', '3D Rendering API', 'Microsoft'];
+connection.query(sql, params, (err, rows, fields) => {
+    if (err) {
+    	console.log(err);
+    }
+    else {
+    	console.log(rows);
+    }
+});
+```
+```javascript
+var sql = 'SELECT * FROM topic;';
+connection.query(sql, (err, rows, fields) => {
+    if (err) {
+    	console.log(err)
+    } else {
+    	for (i = 0; i < rows.length; ++i)
+        	console.log(rows[i].description);
+    }
+});
+```
+
+---
+
+
+# Assignment
+
+* <span style="font-size:120%">localhost:3000/profile 에서는 db에 저장된 게시글들의 제목이 목록에 보임.</span>
+* <span style="font-size:120%">localhost:3000/profile/:id 에서는 해당 id의 제목, 내용, 작성자가 본문에 보이도록 하며, edit, delete, 첨부된 파일 다운로드 링크 제공.</span>
+
