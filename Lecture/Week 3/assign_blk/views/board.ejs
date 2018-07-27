@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <table border="2">
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>글쓴이</th>
+            <th>조회수</th>
+            <th>수정일</th>
+        </tr>
+        <% for(let i = 0; i < rows.length; i++){ %>
+            <tr>
+                <td><%=rows[i].idx%></td>
+                <td><a href = "/board/read/<%=rows[i].idx%>"><%=rows[i].title%></td>
+                <td><%=rows[i].writer%></td>
+                <td><%=rows[i].hit%></td>
+                <td><%=rows[i].moddate%></td>
+            </tr>
+
+        <% } %>
+    </table>
+    <div><a href="/board/write"> 글쓰기 </a></div>
+  </body>
+</html>
