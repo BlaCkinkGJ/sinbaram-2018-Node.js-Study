@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const multer     = require('multer')
+
+const multer     = require('multer');
 const storage    = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads/');
@@ -15,7 +16,6 @@ const upload     = multer({ storage: storage });
 const mongodb    = require('mongodb');
 const client     = mongodb.MongoClient;
 const ObjectId   = mongodb.ObjectId; 
-const fs         = require('fs');
 
 app.locals.pretty = true;
 
@@ -34,7 +34,7 @@ client.connect('mongodb://localhost:27017/school', {useNewUrlParser : true}, fun
         database = client.db('o2');
         collection = database.collection('posting');
         
-        collection.remove({});
+        //collection.remove({});
         
         app.get('/topic/add', (req, res) => {
             collection.find({}, {'_id':1,'title':1,'description':0, 'author':0, 'filename':0}).toArray((err, topics) => {

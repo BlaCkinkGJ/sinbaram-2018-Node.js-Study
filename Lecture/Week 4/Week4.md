@@ -353,6 +353,5 @@ connection.query(sql, (err, rows, fields) => {
 
 # Assignment
 
-* <span style="font-size:120%">localhost:3000/profile 에서는 db에 저장된 게시글들의 제목이 목록에 보임.</span>
-* <span style="font-size:120%">localhost:3000/profile/:id 에서는 해당 id의 제목, 내용, 작성자가 본문에 보이도록 하며, edit, delete, 첨부된 파일 다운로드 링크 제공.</span>
+* 자신이 원하는 형태의 웹 어플리케이션을 NodeJS 와 MySQL 또는 MongoDB를 사용해서 만들기 	
 

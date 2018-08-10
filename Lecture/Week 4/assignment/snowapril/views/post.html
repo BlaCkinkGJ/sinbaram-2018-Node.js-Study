@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Blog Cards</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css'>
+<link rel='stylesheet prefetch' href='http://codepen.io/ChynoDeluxe/pen/eJPeEL'>
+
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body>
+  <!--PEN CODE-->
+	<% for (var i = 0; i < posts.length; i++) { %>
+    <div class="blog-card">
+
+  	  <div class = "photo"><img src=<%= posts[i].image %> style="width:270px;height:200px;"></div>
+  	  <div class="description" style="width:50%">
+  		  <h1><%= posts[i].title %></h1>
+  		  <h2><%= posts[i].author %></h2>
+				<p>Dummy Description</p>
+          <!--
+          <div class="container-login100-form-btn" >
+              <div class="wrap-login100-form-btn">
+                  <div class="login100-form-bgbtn"></div>
+                  <button class="login100-form-btn" onclick=>
+                      DELETE
+                  </button>
+              </div>
+              -->
+          <a href="post/?post_title=<%= posts[i].title %>">세부 정보</a>
+          </div>
+    </div>
+  <% } %>
+<!--END PEN CODE-->
+  
+  
+</body>
+</html>

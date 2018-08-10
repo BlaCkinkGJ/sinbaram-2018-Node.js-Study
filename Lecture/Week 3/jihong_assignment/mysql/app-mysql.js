@@ -19,10 +19,13 @@ const connection = mysql.createConnection({
     password : 'tlswlgmd12',
     database : 'o2'
 });
+const logger = require('morgan');
 
 connection.connect();
 
 app.locals.pretty = true;
+
+app.use(logger('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use('/user', express.static('uploads'));
 
@@ -39,6 +42,7 @@ app.get('/topic/add', (req, res) => {
         res.render('add', {topics:topics});
     });
 });
+
 
 app.post('/topic/add', (req, res) => {
     var title = req.body.title;
